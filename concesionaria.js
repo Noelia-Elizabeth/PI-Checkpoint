@@ -5,16 +5,17 @@ Además, necesitarás crear un objeto literal llamado concesionaria que contendr
 
 Por último, nuestro objeto literal debe tener un atributo llamado autos que contenga la lista de automóviles importada anteriormente.
 */
+const { filter } = require('./autos');
 let autos = require('./autos') //Importo el array autos para usarlo.
 
 let concesionaria = { //Creo el objeto literal concesionaria.
-    autos: autos, //Lista de atuos importada.
+    autos: autos, //Lista de autos importada.
 /*
 Ahora que la concesionaria tiene los autos, es posible crear la funcionalidad buscarAuto que reciba por parámetro la patente y devuelva el auto al cual le corresponde. En caso de no encontrar el mismo, deberá retornar null.
 
 Para que todo funcione tenés que agregar el código que escribiste en el ejercicio anterior.
 */  
-    buscarAuto: function (patente) { //Creo la función que recibe por parámetro una patente.
+/*    buscarAuto: function (patente) { //Creo la función que recibe por parámetro una patente.
        for (let i = 0; i < this.autos.length; i++) {
           let auto = this.autos[i];
           if (auto.patente === patente) { //Verifica si la patente ingresada por parámetro es la misma que la del auto encontrado.
@@ -22,7 +23,15 @@ Para que todo funcione tenés que agregar el código que escribiste en el ejerci
           }
         }
         return null; //Retorna null en caso de no encontrar un auto.
+    },*/
+
+//Actualización incluyendo métodos de Arrays.
+
+    buscarAuto: function (patente) {
+        let auto = this.autos.find (auto => auto.patente === patente);
+        return auto ? auto : null;
     },
+
 /*
 Ahora, María les pide que agreguen la funcionalidad de venderAuto que recibe la patente y, en caso de encontrar al automóvil, le asigna el estado de vendido.
 
@@ -30,7 +39,7 @@ Ahora, María les pide que agreguen la funcionalidad de venderAuto que recibe la
 
 Recordatorio: Para comenzar tenés que agregar el código que escribiste en el ejercicio anterior. Para resolver esta nueva funcionalidad, tendrás que utilizar la función buscarAuto.
 */ 
-    venderAuto: function (patente) { //Creo la función que recibe por parámetro una patente.
+/*   venderAuto: function (patente) { //Creo la función que recibe por parámetro una patente.
        let arr = [];
         for (let i = 0; i < this.autos.length; i++) {
             let auto = this.buscarAuto(patente);
@@ -40,11 +49,20 @@ Recordatorio: Para comenzar tenés que agregar el código que escribiste en el e
             }
         }
        return arr; //Retorna el auto que se vendió.
+    },*/
+
+//Actualización incluyendo métodos de Arrays.
+
+    venderAuto: function (patente) {
+        let auto = this.buscarAuto(patente);
+        auto.vendido === false ? auto.vendido = true : "";
+        return auto;
     },
-/*
+
+/*node 
 La primera es poder contar, como concesionaria, con la habilidad de poder tener la lista de autos para la venta. A lo cual, María, cree que es una tarea sencilla que Juan y vos pueden encarar solos, usando la función autosParaLaVenta, aunque por las dudas ella les recuerda que no deberían de aparecer los autos que ya fueron vendidos.
 */
-    autosParaLaVenta: function () { //Creo la función.
+/*    autosParaLaVenta: function () { //Creo la función.
        let arr = [];
              for (let i = 0; i < this.autos.length; i++) {
                 let auto = this.autos[i];
@@ -53,6 +71,12 @@ La primera es poder contar, como concesionaria, con la habilidad de poder tener 
                 }
              }
        return arr; //Retorna los autos que figuran como no vendidos.
+    },*/
+
+//Actualización incluyendo métodos de Arrays.
+
+    autosParaLaVenta: function () {
+        return this.autos.filter(auto => auto.vendido === false);
     },
 /*
 María, contenta con el trabajo que realizaron, les pide otra funcionalidad extra. Resulta que a la concesionaria le suelen preguntar muy seguido cuáles de los autos para la venta son 0 km. Tené en cuenta que María considera que un auto 0 km es aquel que tenga un kilometraje menor a 100. Vas a tener que desarrollar la funcionalidad autosNuevos.
@@ -61,7 +85,7 @@ María, contenta con el trabajo que realizaron, les pide otra funcionalidad extr
 
 Para comenzar, tenés que agregar el código que escribiste en el ejercicio anterior.
 */
-    autosNuevos: function () { //Creo la función.
+/*    autosNuevos: function () { //Creo la función.
         let arr = [];
         let auto = this.autosParaLaVenta(); //Guarda en una variable auxiliar la lista de autos que figuran como no vendidos.
         for (let i = 0; i < auto.length; i++) {
@@ -71,6 +95,12 @@ Para comenzar, tenés que agregar el código que escribiste en el ejercicio ante
             }
         }
         return arr; //Retorna una lista de Strings indicando cuáles de los autos no vendidos son 0km.
+    },*/
+
+//Actualización incluyendo métodos de Arrays.
+
+    autosNuevos: function () {
+        return this.autosParaLaVenta().filter(auto => auto.km < 100);
     },
 /*
 El cliente le pidió saber cuánto dinero generaron las ventas.
@@ -79,7 +109,7 @@ María te pide que completes la función listaDeVentas que devuelve una lista qu
 
 Para comenzar tenés que agregar el código que escribiste en el ejercicio anterior.
 */
-    listaDeVentas : function () { //Creo la función.
+/*    listaDeVentas : function () { //Creo la función.
         let arr = [];
         for (let i = 0; i < this.autos.length; i++) {
            let auto = this.autos[i];
@@ -88,17 +118,30 @@ Para comenzar tenés que agregar el código que escribiste en el ejercicio anter
            }
         }
         return arr; //Retorna una lista con los precios de los autos vendidos.
+    },*/
+
+//Actualización incluyendo métodos de Arrays.
+
+    listaDeVentas: function () {
+        let auto = this.autos.filter(auto => auto.vendido === true);
+        return auto.map(auto => auto.precio);
     },
 /*
 Terminada esta función, María te pide que resuelvas la funcionalidad de totalDeVentas, que justamente nos devuelva la sumatoria del valor de todas las ventas realizadas
 */
-    totalDeVentas: function () { //Creo la función.
+/*    totalDeVentas: function () { //Creo la función.
         let total = this.listaDeVentas(); //Guarda en una variable auxiliar la lista con los precios de los autos vendidos.
         let aux = 0;
         for (let i = 0; i < total.length; i++) {
             aux += total[i]; //Va sumando el total de ventas.
         }
         return aux; //Retorna el total de las ventas.
+    },*/
+
+//Actualización incluyendo métodos de Arrays.
+
+    totalDeVentas: function () {
+        return this.listaDeVentas().reduce((total, precio) => total + precio);
     },
 /*
 Muy contento el equipo por cómo viene el desarrollo, por la tarde, María te comenta que se agrega una funcionalidad muy importante: la de verificar si una persona puede comprar o no un auto. Esta permite al sistema definir si una persona al consultar por un auto, puede comprarlo. Las personas solo sacan los autos en cuotas y tomando dos factores como condición de compra. Una es el costo total: si el total de un auto excede lo que la persona puede pagar, no va a comprar el auto. Otra condición es su capacidad de pago en cuotas: si la capacidad de pago en cuotas supera al costo de la cuota, va a poder pagarlo. Si ambas condiciones se cumplen, se realiza la compra.﻿
@@ -116,14 +159,25 @@ capacidadDePagoTotal: 100000
 Para comenzar tenés que agregar el código que escribiste en el ejercicio anterior.
 */
 
-    puedeComprar: function (auto, persona) { //Creo la función que recibe como parámetro un auto y una persona.
-        if (auto.precio <= persona.capacidadDePagoTotal && persona.capacidadDePagoEnCuotas >= (auto.precio/auto.cuotas)) {
+/*    puedeComprar: function (auto, persona) { //Creo la función que recibe como parámetro un auto y una persona.
+        if (auto.precio <= persona.capacidadDePagoTotal && persona.capacidadDePagoEnCuotas >= (auto.precio/auto.cuotas)) {*/
 /*Evalua si el precio total no excede el total de dinero de la persona Y si las cuotas no exceden lo que puede pagar la persona por mes.*/
-            return true; //Retorna que sí puede comprar el auto.
+/*            return true; //Retorna que sí puede comprar el auto.
         } else {
             return false; //Retorna que no puede comprar el auto.
         }
+    },*/
+
+//Actualizción incluyendo if ternarios.
+
+    puedeComprar: function (auto, persona) {
+        return (auto.precio <= persona.capacidadDePagoTotal) ? ((persona.capacidadDePagoEnCuotas >= (auto.precio/auto.cuotas)) ? true : false) : false;
     },
+
+/*    puedeComprar: function(auto, persona) {
+        return persona.capacidadDePagoTotal > auto.precio &&
+            persona.capacidadDePagoEnCuotas > (auto.precio / auto.cuotas);
+    },*/
 /*
 Ahora, te comprometiste a realizarla. Así que manos a la obra. Hay que escribir la función autosQuePuedeComprar, que recibe una persona y devuelve la lista de autos que puede comprar.
 
@@ -137,7 +191,7 @@ La función debe de realizar los siguientes pasos:
 
 Para comenzar tenés que agregar el código que escribiste en el ejercicio anterior.
 */
-    autosQuePuedeComprar: function (persona) { //Creo la función que recibe como parámetro una persona.
+/*    autosQuePuedeComprar: function (persona) { //Creo la función que recibe como parámetro una persona.
         let arr;
         arr = this.autosParaLaVenta(); //Guarda en una variable auxiliar la lista de autos que figuran como no vendidos.
         let total = [];
@@ -147,10 +201,23 @@ Para comenzar tenés que agregar el código que escribiste en el ejercicio anter
             }
         }
         return total; //Retorna una lista de los autos que la persona puede comprar.
+    }*/
+
+//Actualización incluyendo métodos de Arrays.
+
+    autosQuePuedeComprar: function (persona) {
+        return this.autosParaLaVenta().filter(auto => this.puedeComprar(auto, persona));
+    
+//        this.puedeComprar().filter(auto, persona) ? auto : "");
+//        this.puedeComprar().filter(this.autosParaLaVenta(), persona) ? this.autosParaLaVenta() : "";
     }
+};
 
-}
+console.log('---------------Ejercicio Función venderAuto----------------');
+console.log(concesionaria.venderAuto('APL123'));
 
+console.log('------------Ejercicio Función autosParaLaVenta--------------');
+console.log(concesionaria.autosParaLaVenta());
 
 console.log('---------------Ejercicio Función autosNuevos----------------');
 console.log(concesionaria.autosNuevos()) //Cambiar el valor de km del Ford Fiesta a, por ejemplo, 90 para ver cambios en el resultado.
